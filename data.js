@@ -1,11 +1,11 @@
 /* Synthetic fixtures for the interactive demo.
-   No production data: every person, company, email and row below is invented.
-   Structure mirrors the real pipeline's shapes so the walkthrough stays faithful. */
+   No production data. Names, companies and emails are invented.
+   The field names mirror the real pipeline, so the fixtures stay useful. */
 
 window.DEMO_DATA = {
   meta: {
     title: "Autonomous Sourcing & Outreach",
-    subtitle: "How a dry-run-by-default agent pipeline finds, scores, and reaches out to partners.",
+    subtitle: "How an agent that runs dry by default finds, scores and contacts partners.",
     syntheticNotice:
       "All names, companies, emails and rows below are synthetic. Nothing here is production data."
   },
@@ -13,12 +13,12 @@ window.DEMO_DATA = {
   metrics: [
     { value: "8", label: "Pipeline stages", note: "Discovery to feedback dataset" },
     { value: "3", label: "Sourcing tracks", note: "Events, Partners, Speakers" },
-    { value: "300+", label: "Operational scripts", note: "Each dry-run by default" },
-    { value: "98", label: "Test modules", note: "Offline stages are pure functions" }
+    { value: "300+", label: "Operational scripts", note: "Each one dry run by default" },
+    { value: "98", label: "Test modules", note: "The offline stages are pure functions" }
   ],
 
-  /* Every stage carries where it runs, whether it touches the network,
-     and the artifact it hands to the next stage. */
+  /* Each stage records where it runs, whether it touches the network,
+     and what it passes to the next stage. */
   stages: [
     {
       id: "discovery",
@@ -29,11 +29,11 @@ window.DEMO_DATA = {
       where: "scripts/sourcing_loop.py",
       artifact: "candidate pool",
       detail:
-        "A search API call runs per target geography and track. Queries are built from the city list and the track's intent, so the same engine serves Events, Partners and Speakers without a separate crawler per track.",
+        "One search API call runs per target geography and track. Queries come from the city list and the track's intent, so Events, Partners and Speakers share one engine instead of one crawler each.",
       points: [
         "One query plan per city, not per keyword.",
-        "Blocklists drop known non-targets before any spend.",
-        "Read-only: no writes, only candidate URLs collected."
+        "Blocklists remove known non-targets before any spend.",
+        "Read-only: the stage collects candidate URLs and writes nothing."
       ]
     },
     {
@@ -45,11 +45,11 @@ window.DEMO_DATA = {
       where: "services/extraction.py",
       artifact: "candidate rows",
       detail:
-        "The LLM reads each candidate page and returns structured fields: company, city, event, date, person, title, links. The model classifies and summarises only. It never decides a score, and it never invents a URL.",
+        "The LLM reads each candidate page and returns structured fields: company, city, event, date, person, title, links. The model classifies and summarises. Scoring happens later, in code, and the model cannot invent a URL.",
       points: [
-        "Candidate CSVs are the interchange format between every stage.",
-        "Rubric columns are appended, never renamed.",
-        "Missing evidence is left missing, not guessed."
+        "Stages exchange candidate CSVs, so any stage can be replayed alone.",
+        "Rubric columns get appended. Existing column names stay as they are.",
+        "A missing field stays empty. The model does not fill the gap."
       ]
     },
     {
@@ -61,7 +61,7 @@ window.DEMO_DATA = {
       where: "services/rubric/",
       artifact: "scored rows",
       detail:
-        "Pure functions turn a row into a score. Organization fit and persona fit each run 1 to 5. Market weighting then converts the base score into a priority score without ever changing the base score itself.",
+        "Pure functions turn a row into a score. Organisation fit and persona fit each run 1 to 5. Market weighting then converts the base score into a priority score without ever changing the base score itself.",
       points: [
         "No network, no LLM: the same row always scores the same.",
         "A score level is assigned only if collected data supports it.",
@@ -109,7 +109,7 @@ window.DEMO_DATA = {
       where: "the CRM (human)",
       artifact: "approved set",
       detail:
-        "Sourcing stops here. A person decides what is qualified. The agent's job is to make that decision fast and well-evidenced, not to make it.",
+        "A person decides what is qualified. The agent's job is to make that decision fast and well evidenced, not to make it.",
       points: [
         "Every row arrives with a source URL.",
         "QC sampling flags low-confidence rows for a second look.",
@@ -159,10 +159,10 @@ window.DEMO_DATA = {
         "Find the organisers who run significant events in target cities, prioritising late 2026. The agent returns the single best contact per organisation. Expanding to second and third contacts is deliberately manual.",
       steps: [
         { actor: "agent", label: "Event discovery", note: "Scored 10 for a flagship industry event down to 5 for general activity." },
-        { actor: "agent", label: "One best contact per organisation", note: "Event owner first, established organiser as fallback." },
-        { actor: "human", label: "Multi-contact expansion", note: "Agent caps at one pick. Growth is a judgement call." },
+        { actor: "agent", label: "One best contact per organisation", note: "Event owner first. An established organiser is the fallback." },
+        { actor: "human", label: "Multi-contact expansion", note: "The agent caps at one pick. Adding the next contacts is a judgement call." },
         { actor: "human", label: "Evidence validation", note: "Organisation, city, event, date, title, links from an official page." },
-        { actor: "gated", label: "Readiness check", note: "Blocks a handoff when city or variables are missing." }
+        { actor: "gated", label: "Readiness check", note: "Blocked when the city or a template variable is missing." }
       ],
       constraints: [
         "Date window is only partly enforced by default.",
@@ -175,18 +175,18 @@ window.DEMO_DATA = {
       name: "Partners",
       goal: "Find decision-makers at companies the CRM already qualified.",
       intent:
-        "Not cold discovery. The pipeline pulls companies already sitting in qualified stages, then searches for partnerships, business development, marketing and events owners at each one.",
+        "This track starts inside the CRM. The pipeline pulls companies already sitting in qualified stages, then finds the people who own partnerships, business development, marketing and events at each one.",
       steps: [
         { actor: "agent", label: "Pull qualified companies", note: "Company selection comes from the CRM pipeline stages." },
-        { actor: "agent", label: "Persona sourcing", note: "Roles scored against a three-tier persona ladder." },
+        { actor: "agent", label: "Persona sourcing", note: "Each role is scored on a three-tier persona ladder." },
         { actor: "human", label: "Identity and field validation", note: "Title, company and domain match, plus an evidence URL." },
         { actor: "human", label: "Workload cap", note: "Three contacts per company maximum. Two is the target." },
-        { actor: "gated", label: "Readiness check", note: "Catches blanks and duplicates before handoff." }
+        { actor: "gated", label: "Readiness check", note: "Finds blank fields and duplicates before the handoff." }
       ],
       constraints: [
         "Contacts without a persona set are invisible in the CRM view.",
-        "Priority labels are preserved, never re-derived.",
-        "No email enrichment credits are spent during sourcing."
+        "Python keeps the priority labels and never re-derives them.",
+        "Sourcing spends no email enrichment credits."
       ]
     },
     {
@@ -200,11 +200,11 @@ window.DEMO_DATA = {
         { actor: "agent", label: "Relevance classification", note: "Deterministic dedup, LLM only for relevance." },
         { actor: "human", label: "Approve or reject", note: "A reviewer decision column, intentionally blank at generation." },
         { actor: "human", label: "Promotion", note: "Approved rows move toward outreach status." },
-        { actor: "gated", label: "Bulk import", note: "Deferred and gated, never implied by a filename." }
+        { actor: "gated", label: "Bulk import", note: "Deferred behind a gate. A filename cannot trigger it." }
       ],
       constraints: [
-        "Review queue, not an import file.",
-        "Deduplication is deterministic, never model-driven.",
+        "The output is a review queue that no import job reads.",
+        "Deduplication runs in code, and the model never sees the dedup decision.",
         "No automatic sequence enrolment."
       ]
     }
@@ -359,14 +359,14 @@ window.DEMO_DATA = {
     }
   ],
 
-  /* Email copy templates per track. Assembled from evidence, never free-form. */
+  /* Email copy per track. Assembled from collected evidence, never free-form. */
   emailTemplates: {
     partners: {
       subject: "Partnering with {company} in {city}",
       greeting: "Hi {first},",
       body: [
         "{compliment}",
-        "{event} runs partner programmes in 40+ markets and refreshes the roster every quarter. {fit}",
+        "{event} runs partner programmes across several markets and refreshes the roster every quarter. {fit}",
         "I'd like to explore whether {company} would want a partnership slot in {city}. Worth a short call?"
       ],
       signoff: "Best,\nPartnerships"

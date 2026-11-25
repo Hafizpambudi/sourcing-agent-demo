@@ -344,7 +344,7 @@
       '<span class="dedup-verdict ' + c.key + '">' + c.label + '</span>' +
       '<span class="dedup-score">' + (score * 100).toFixed(1) + '<span class="mono muted" style="font-size:.9rem">/100</span></span>' +
       '<span class="dedup-meter"><span style="width:' + (score * 100).toFixed(1) + '%;background:' + color + '"></span></span>' +
-      '<p class="dedup-note">Similarity is computed on a normalised name: case, punctuation, legal suffixes and a trailing year are stripped first.</p>' +
+      '<p class="dedup-note">The score compares normalised names. It strips case, punctuation, legal suffixes and a trailing year before scoring.</p>' +
       '<p class="dedup-action">' + esc(c.action) + '</p>';
   }
 
@@ -526,7 +526,7 @@
       note.innerHTML = "<strong>outreach_sequence</strong> is already set to <code>" + esc(c.sequence) +
         "</code> by a human. The agent never touches this field, so the contact is left alone. Correct behaviour: it stays in its assigned sequence.";
     } else {
-      note.innerHTML = "<strong>outreach_sequence</strong> stays blank. The agent never writes it — a person assigns the sequence during qualification. Uploading a contact does not enrol it; enrolment is a separate, human-set decision.";
+      note.innerHTML = "<strong>outreach_sequence</strong> stays blank. The agent never writes it. A person assigns the sequence during qualification. Uploading a contact does not enrol it: enrolment is a separate decision a person makes.";
     }
   }
 
@@ -553,8 +553,8 @@
       if (i >= steps.length) {
         st.className = "send-status mono ok";
         st.textContent = sendMode === "dry"
-          ? "dry run complete — nothing was sent"
-          : "enrolled — status Prospecting → Sent";
+          ? "Dry run complete. Nothing was sent."
+          : "Enrolled. Status moved from Prospecting to Sent.";
         return;
       }
       steps.forEach(function (s, k) { s.classList.toggle("active", k === i); if (k < i) { s.classList.add("done"); s.classList.remove("active"); } });

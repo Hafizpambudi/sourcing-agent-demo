@@ -252,7 +252,7 @@ body::before {
 .stage-blurb { color: var(--ink-dim); margin: .8rem 0 1rem; }
 .stage-points { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; }
 .stage-points li { position: relative; padding-left: 1.4rem; color: var(--muted); font-size: .92rem; }
-.stage-points li::before { content: "—"; position: absolute; left: 0; color: var(--accent); }
+.stage-points li::before { content: ""; position: absolute; left: 0; top: .62em; width: 6px; height: 6px; background: var(--accent); transform: rotate(45deg); }
 
 .stage-artifact { align-self: start; border: 1px dashed var(--line); border-radius: var(--r); padding: 1rem 1.1rem; background: var(--bg-tint); }
 .stage-artifact-label { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 .4rem; }
