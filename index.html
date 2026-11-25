@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Autonomous Sourcing &amp; Outreach — Interactive Demo</title>
+<meta name="description" content="An interactive walkthrough of a dry-run-by-default agent pipeline that discovers, scores, deduplicates and reaches out to program partners." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0c0b'/%3E%3Cpath d='M8 21 L16 8 L24 21' stroke='%23c2f542' stroke-width='2.5' fill='none'/%3E%3C/svg%3E" />
+</head>
+<body>
+
+<a class="skip-link" href="#hero">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#hero">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-text">Sourcing&nbsp;Agent</span>
+    </a>
+    <nav class="site-nav" aria-label="Sections">
+      <a href="#pipeline">Pipeline</a>
+      <a href="#tracks">Tracks</a>
+      <a href="#rubric">Scoring</a>
+      <a href="#outreach">Outreach</a>
+      <a href="#explorer">Output</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section id="hero" class="section hero">
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <p class="eyebrow"><span class="dot"></span> Dry-run by default &middot; Three tracks &middot; One pipeline</p>
+      <h1 class="display">
+        An agent that finds the right partner,
+        <em>then stops and asks.</em>
+      </h1>
+      <p class="lede">
+        It drafts the first outreach email from evidence it collected — then stops, because
+        sending is a human decision. Behind it: discovery, deterministic scoring, and
+        deduplication against a live CRM, all behind a gate a person has to open.
+      </p>
+      <div class="hero-cta">
+        <p class="cta-note mono">Start here · 30 seconds</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#outreach">See the email it drafts</a>
+          <a class="btn btn-ghost" href="#pipeline">Walk the pipeline</a>
+        </div>
+        <p class="cta-payoff">
+          One synthetic contact, start to finish: eligibility, tier, a drafted email — and
+          the write the agent refuses to make.
+        </p>
+      </div>
+
+      <dl class="metrics" id="metrics"></dl>
+    </div>
+  </section>
+
+  <!-- ============ PROBLEM ============ -->
+  <section id="problem" class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-num">00</p>
+        <h2 class="section-title">The problem</h2>
+      </div>
+      <div class="split">
+        <div>
+          <p class="prose-lg">
+            A growth team has to find the right contact at hundreds of organisations, across
+            dozens of markets, and repeat it every quarter. Finding them by hand means days
+            of searching, cross-checking the CRM, and guessing whether a lead is worth a call.
+          </p>
+          <p class="prose">
+            The pipeline turns that into a repeatable flow: agents do the reading and the
+            scoring, humans do the deciding. The interesting engineering is not the scraping.
+            It is the boundary — knowing exactly where the machine must stop.
+          </p>
+        </div>
+        <div class="split-aside">
+          <div class="aside-card">
+            <h3 class="aside-title">What the machine owns</h3>
+            <ul class="tick-list">
+              <li>Searching and reading source pages</li>
+              <li>Extracting structured fields</li>
+              <li>Scoring against a fixed rubric</li>
+              <li>Deduplicating against the CRM</li>
+              <li>Drafting a first outreach email</li>
+            </ul>
+          </div>
+          <div class="aside-card aside-card-alt">
+            <h3 class="aside-title">What a human keeps</h3>
+            <ul class="tick-list tick-list-alt">
+              <li>Qualifying a contact</li>
+              <li>Resolving fuzzy duplicates</li>
+              <li>Choosing the priority label</li>
+              <li>Opening the write gate</li>
+              <li>Setting the outreach sequence</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PIPELINE ============ -->
+  <section id="pipeline" class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-num">01</p>
+        <h2 class="section-title">Play the pipeline</h2>
+        <p class="section-sub">Eight stages. Click any stage to see what runs, where, and what it hands on.</p>
+      </div>
+
+      <div class="rail" id="rail" role="tablist" aria-label="Pipeline stages"></div>
+
+      <div class="stage-detail" id="stageDetail" role="tabpanel" aria-live="polite"></div>
+
+      <div class="legend">
+        <span class="badge badge-online">online</span>
+        <span class="legend-note">network call</span>
+        <span class="badge badge-offline">offline</span>
+        <span class="legend-note">pure, testable</span>
+        <span class="badge badge-gated">gated</span>
+        <span class="legend-note">needs permission</span>
+        <span class="badge badge-human">human</span>
+        <span class="legend-note">a person decides</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRACKS ============ -->
+  <section id="tracks" class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-num">02</p>
+        <h2 class="section-title">Three tracks, one engine</h2>
+        <p class="section-sub">The same stages serve every program. Only the intent and the target change.</p>
+      </div>
+
+      <div class="tabs" id="trackTabs" role="tablist" aria-label="Sourcing tracks"></div>
+      <div class="track-panel" id="trackPanel" role="tabpanel" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ============ RUBRIC ============ -->
+  <section id="rubric" class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-num">03</p>
+        <h2 class="section-title">Try the scoring rubric</h2>
+        <p class="section-sub">Move the inputs. The score is deterministic, so the same row always lands in the same place.</p>
+      </div>
+
+      <div class="lab">
+        <div class="lab-controls">
+          <div class="control">
+            <label for="orgFit">Organization fit <span class="ctrl-val" id="orgFitVal">3</span></label>
+            <input type="range" id="orgFit" min="1" max="5" step="1" value="3" />
+            <p class="ctrl-hint" id="orgHint"></p>
+          </div>
+          <div class="control">
+            <label for="personaFit">Persona fit <span class="ctrl-val" id="personaFitVal">4</span></label>
+            <input type="range" id="personaFit" min="1" max="5" step="1" value="4" />
+            <p class="ctrl-hint" id="personaHint"></p>
+          </div>
+          <div class="control">
+            <label for="market">Market status</label>
+            <select id="market">
+              <option value="new">new &times; 1.30</option>
+              <option value="underserved" selected>underserved &times; 1.15</option>
+              <option value="saturated">saturated &times; 0.85</option>
+            </select>
+          </div>
+          <div class="control control-inline">
+            <label class="switch">
+              <input type="checkbox" id="media" />
+              <span class="switch-track" aria-hidden="true"></span>
+              <span>Media reach <span class="mono muted">&times; 1.05</span></span>
+            </label>
+          </div>
+          <div class="preset-row" id="presets"></div>
+        </div>
+
+        <div class="lab-output">
+          <div class="score-head">
+            <div class="score-block">
+              <span class="score-label">Total fit</span>
+              <span class="score-value" id="totalFit">7</span>
+              <span class="score-cap">2 &ndash; 10</span>
+            </div>
+            <div class="score-block score-block-accent">
+              <span class="score-label">Priority score</span>
+              <span class="score-value" id="priorityScore">8.05</span>
+              <span class="score-cap" id="bandPill">6-7 viable</span>
+            </div>
+          </div>
+
+          <div class="gauge" id="gauge" aria-hidden="true"><span class="gauge-fill" id="gaugeFill"></span></div>
+
+          <div class="formula mono" id="formula"></div>
+
+          <p class="callout" id="rubricCallout"></p>
+
+          <div class="confidence">
+            <div class="confidence-head">
+              <span>Confidence</span>
+              <span class="score-value score-value-sm" id="confidenceVal">50</span>
+            </div>
+            <div class="confidence-bar"><span id="confidenceFill"></span></div>
+            <p class="ctrl-hint">Start at 50, adjust by evidence, clamp 0&ndash;100. Below 60 flags for QC sampling.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DEDUP ============ -->
+  <section id="dedup" class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-num">04</p>
+        <h2 class="section-title">The deduplication gate</h2>
+        <p class="section-sub">A new record is worthless if the CRM already has it. Exact matches resolve. Fuzzy matches never do.</p>
+      </div>
+
+      <div class="dedup">
+        <div class="dedup-inputs">
+          <div class="control">
+            <label for="dedupA">Existing record</label>
+            <input type="text" id="dedupA" value="Northwind Ventures" />
+          </div>
+          <div class="control">
+            <label for="dedupB">New candidate</label>
+            <input type="text" id="dedupB" value="Northwind Venture Partners" />
+          </div>
+          <div class="preset-row" id="dedupPresets"></div>
+        </div>
+
+        <div class="dedup-result" id="dedupResult"></div>
+      </div>
+
+      <table class="mini-table">
+        <caption>How a similarity score is read</caption>
+        <thead>
+          <tr><th scope="col">Class</th><th scope="col">Rule</th><th scope="col">Outcome</th></tr>
+        </thead>
+        <tbody id="dedupRules"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ OUTREACH ============ -->
+  <section id="outreach" class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-num">05</p>
+        <h2 class="section-title">From a scored row to a drafted email</h2>
+        <p class="section-sub">Pick a contact. The pipeline checks eligibility, derives a tier, assembles the copy, and previews the send.</p>
+      </div>
+
+      <div class="outreach">
+        <div class="contact-list" id="contactList" role="listbox" aria-label="Synthetic contacts"></div>
+
+        <div class="outreach-stage">
+          <div class="gate-checks" id="gateChecks"></div>
+
+          <div class="email-preview" id="emailPreview"></div>
+
+          <div class="send-row">
+            <div class="send-mode" role="group" aria-label="Send mode">
+              <button type="button" class="mode-btn is-active" data-send="dry" aria-pressed="true">Dry run</button>
+              <button type="button" class="mode-btn" data-send="live" aria-pressed="false">Enroll live</button>
+            </div>
+            <button type="button" class="btn btn-primary" id="sendBtn">Preview enrolment</button>
+            <span class="send-status mono" id="sendStatus"></span>
+          </div>
+
+          <div class="guard-note" id="guardNote"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GATES ============ -->
+  <section id="gates" class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-num">06</p>
+        <h2 class="section-title">Two switches before any write</h2>
+        <p class="section-sub">Independent permissions that must agree. A schema change needs a third.</p>
+      </div>
+
+      <div class="gate-lab">
+        <div class="gate-controls" id="gateControls"></div>
+        <div class="gate-result" id="gateResult"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPLORER ============ -->
+  <section id="explorer" class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-num">07</p>
+        <h2 class="section-title">What comes out</h2>
+        <p class="section-sub">A review-ready table. Sort a column, filter a track, search a city.</p>
+      </div>
+
+      <p class="synthetic-banner" id="syntheticBanner"></p>
+
+      <div class="table-tools">
+        <input type="search" id="rowSearch" placeholder="Search company, city, country&hellip;" aria-label="Search rows" />
+        <div class="chips" id="rowFilters" role="group" aria-label="Filter by track"></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table" id="rowTable">
+          <thead>
+            <tr>
+              <th scope="col" data-sort="company">Company</th>
+              <th scope="col" data-sort="city">City</th>
+              <th scope="col" data-sort="country">Country</th>
+              <th scope="col" data-sort="track">Track</th>
+              <th scope="col" class="num" data-sort="fit">Fit</th>
+              <th scope="col" class="num" data-sort="priority">Priority</th>
+              <th scope="col" data-sort="band">Band</th>
+              <th scope="col" class="num" data-sort="confidence">Conf.</th>
+              <th scope="col" data-sort="dedup">Dedup</th>
+            </tr>
+          </thead>
+          <tbody id="rowBody"></tbody>
+        </table>
+      </div>
+      <p class="table-foot mono" id="rowCount"></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-title">Autonomous Sourcing &amp; Outreach</p>
+      <p class="footer-note">Static interactive demo. No backend, no tracking, works offline.</p>
+    </div>
+    <p class="footer-note mono" id="footerNotice"></p>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
